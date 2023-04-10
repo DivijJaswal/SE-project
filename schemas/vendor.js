@@ -13,4 +13,5 @@ const Vendor = new mongoose.Schema({
         type:String,
         require:true
     }
-})
+});
+module.exports  = new mongoose.model("Vendors",Vendor); 

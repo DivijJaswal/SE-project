@@ -15,4 +15,4 @@ const shopOwner = new mongoose.Schema({
    }
 });
 
-module.exports = mongoose.model("shopOwner",shopOwner);
+module.exports = mongoose.model("shopOwners",shopOwner);
