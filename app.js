@@ -12,15 +12,14 @@ app.set("view engine", "ejs");
 app.use(cors());
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
-// mongoose.connect(mongourl,{
-//   useNewUrlParser:true,
-//   useUnifiedTopology:true})
-//   .then((res)=>{
-//     console.log("Connected to database");
-//   })
-//   .catch((err)=>{
+mongoose.set('strictQuery',false);
+mongoose.connect(mongourl,{
+  useNewUrlParser:true,
+  useUnifiedTopology:true
+},()=>{
+  console.log("Connected to database");
+});
 
-//   });
 
 
 app.use(express.static("public"));
