@@ -6,7 +6,7 @@ const dotenv = require("dotenv");
 const forgotUser = require("../schemas/forgotSchema");
 const signUpUsers = require("../schemas/signUpSchema");
 dotenv.config();
-const sendEmail = require("./sendEmailForgot");
+const sendEmail = require("./sendEmail");
 const key = process.env.JWT_KEY
 
 const logIn = async (req, res) => {
