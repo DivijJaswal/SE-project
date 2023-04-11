@@ -9,6 +9,7 @@ const dotenv = require("dotenv");
 const adminRouter = require("./Router/admin");
 const jwtVerify = require("./middleware/jwt");
 const verifyLogins = require("./middleware/verifyLogins");
+const operationRouter = require("./Router/operationRouter");
 const HTO = require("./middleware/homeToOperations");
 dotenv.config();
 const mongourl = process.env.MONGO_URL;
@@ -39,9 +40,7 @@ app.use(express.static("public"));
 app.use("/auth",verifyLogins,authRouter);
 
 // operations for users
-app.use("/operations",jwtVerify ,(req, res) => {
-  res.render("selection");
-});
+app.use("/operations",jwtVerify ,operationRouter);
 
 // admin 
 app.use("/admin",adminRouter);
