@@ -19,7 +19,7 @@ const sendEmail = async (parameters) =>{
         to: email, // list of receivers
         subject: subject , // Subject line
         text: url, // plain text body
-        html: `<h3>Click On this url to verify your account</h3>+<a src=${url}></a>` // html body
+        html: `<h3>Click On this url to verify your account</h3>+<a href=${url}>url</a>` // html body
     };
 
    await  transporter.sendMail(mailOptions, (error, info) => {

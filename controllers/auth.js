@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Vendor = require("../schemas/vendor");
 const shopOwner = require("../schemas/shopOwner");
+const http = require("http");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const forgotUser = require("../schemas/forgotSchema");
@@ -22,6 +23,7 @@ const logIn = async (req, res) => {
                 // tokens must be generated 
                 const jwt_payload = {_id:user._id,name:user.name,email,isvendor:true}; 
                 const token = jwt.sign(jwt_payload,key);
+
                 await res.cookie("token",token).status(200).json({ message: "loggedIn",token});
                 res.redirect("/operations");
             }
@@ -96,16 +98,15 @@ const signUpComplete = async (req, res,next) => {
 
             
             const vendor = await new Vendor({ email,  name, password });
-            await vendor.save();
+           // await vendor.save();
 
             
 
             const jwt_payload = {_id:vendor._id,name,email,isvendor:true}; 
             const token = jwt.sign(jwt_payload,key);
            
-             //res.json({ message: "Account Added",token})
-             res.header({authorization:"Bearer "+token});
-             res.redirect("/operations");
+             res.cookie('Authorization',"Bearer " + token);
+             res.redirect(302,"/operations");
             
         }
     }
