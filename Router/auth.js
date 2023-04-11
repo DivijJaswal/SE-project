@@ -31,7 +31,7 @@ router.
 get("/verify/forgotPassword/:end_Point",(req,res)=>{
     res.render("forgotPasswordPage");
 })
-post("/verify/forgotPassword/:end_Point",(req,res,next)=>{req.body=req.params.end_Point;next();},forgotPasswordVerifier);
+.post("/verify/forgotPassword/:end_Point",(req,res,next)=>{req.body=req.params.end_Point;next();},forgotPasswordVerifier);
 
 
 module.exports = router;
