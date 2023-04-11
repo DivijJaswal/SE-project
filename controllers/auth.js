@@ -5,21 +5,24 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const forgotUser = require("../schemas/forgotSchema");
 const signUpUsers = require("../schemas/signUpSchema");
+const sha256 = require("sha256");
 dotenv.config();
+const base_url = process.env.BASE_URL;
 const sendEmail = require("./sendEmail");
 const key = process.env.JWT_KEY
 
 const logIn = async (req, res) => {
     const { email, password, option } = req.body;
-    if (option == "vendor") {
+    console.log(req.body);
+    if (option === "vendor") {
         const user = await Vendor.findOne({ email });
+        console.log(user);
         if (user) {
             if (password === user.password) {
                 // tokens must be generated 
                 const jwt_payload = {_id:user._id,name:user.name,email,isvendor:true}; 
                 const token = jwt.sign(jwt_payload,key);
-                res.cookie("token",token);
-                res.status(200).json({ message: "loggedIn",token});
+                await res.cookie("token",token).status(200).json({ message: "loggedIn",token});
                 res.redirect("/operations");
             }
             else {
@@ -58,61 +61,72 @@ const signUpForVerification = async (req,res) =>{
     const {username,password,email,option} = req.body;
     const date = new Date();
     const end_Point = sha256(date+email);
-    let user = signUpUsers.findOne({email:email,type:option});
-    if(!user){
-        user = new signUpUsers({email,password,name:username,type:option,end_Point});
+    const user = await signUpUsers.findOne({email:email,type:option});
+    const url = base_url + "/auth/verify/register/"+end_Point;
+    if(user){await user.delete();}
+    const user1 = new signUpUsers({name:username,email,password,type:option});
+    try{
+     await user1.save();
+     await sendEmail({subject:"Email Verfication Link",url,email});
+     res.redirect("/auth/login");
     }
-    else {
-        user.end_Point = end_Point;
+    catch(err){
+       console.log(err);
+       res.redirect("/auth/register");
     }
-    await user.save();
-    await sendEmail({subject:"Email Verfication Link",url,email});
-    res.redirect("/auth/login");
 
 
 } 
-const signUpComplete = async (req, res) => {
+const signUpComplete = async (req, res,next) => {
     const { end_Point } = req.body;
-    const user = await signUpUsers({end_Point});
-
+    const user = await signUpUsers.findOne({end_Point});
     // if no user is signedup
     if(!user){res.redirect("/auth/login");} 
+    else {
 
-     const {name,email,password,option} = user;
-    if (option == "vendor") {
+     const {name,email,password,type} = user;
+     await user.delete();
+     const option = type;
+    if (option === "vendor") {
         const user = await Vendor.findOne({ email });
         if (user) {
-            res.status(200).json({ message: "User with this email already Exists" });
+           return  res.status(200).json({ message: "User with this email already Exists" });
         }
         else {
 
-
-            const vendor = new Vendor({ email,  name, password });
+            
+            const vendor = await new Vendor({ email,  name, password });
             await vendor.save();
 
             
 
-            const jwt_payload = {_id:user._id,name,email,isvendor:true}; 
+            const jwt_payload = {_id:vendor._id,name,email,isvendor:true}; 
             const token = jwt.sign(jwt_payload,key);
-            res.status(200).cookie('token',token).json({ message: "Account Added",token});
-            res.redirect("/operations",{token});
+           
+             //res.json({ message: "Account Added",token})
+             res.header({authorization:"Bearer "+token});
+             res.redirect("/operations");
+            
         }
     }
     else {
         const user = await shopOwner.findOne({ email });
         if (user) {
-            res.status(200).json({ message: "User with this email already Exists" });
+            return res.status(200).json({ message: "User with this email already Exists" });
         }
         else {
-            const user = new shopOwner({ email, name, password });
+            const user = await new shopOwner({ email, name, password });
             await user.save();
             const jwt_payload = {_id:user._id,name,email,isvendor:false}; 
             const token = jwt.sign(jwt_payload,key);
-            res.status(200).cookie('token',token).json({ message: "Account Added",token });
-            res.redirect("/operations",{token});
+            //res.status(200).cookie('token',token).json({ message: "Account Added",token })
+            res.cookie('jwt',token)
+            res.redirect(200,"/operations");
         }
 
     }
+}
+
 }
 
 const forgotPassword = async (req, res) => {
@@ -135,6 +149,7 @@ const forgotPassword = async (req, res) => {
     const url_endPoint = sha256(date+email);
     const url = base_url + "/auth/verify/forgotPassword/"+url_endPoint;
     const user = forgotUser({email,type:option});
+    try{
     if(user){
       user.end_Point=url_endPoint;
       await user.save();
@@ -144,7 +159,10 @@ const forgotPassword = async (req, res) => {
         await new_user.save();
     }
     await sendEmail({subject:"Reset Password  Link",email,url});
-
+}
+   catch(err){
+    console.log(err);
+   }
     // this happens when sent is failed so we will redirect to forgot password page
     res.redirect("/auth/forgotPassword");
     

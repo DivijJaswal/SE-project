@@ -5,6 +5,8 @@ const key = process.env.JWT_KEY;
 
 const jwtVerify = (req,res,next) =>{
        const authHeader = req.headers.authorization;
+       console.log(req.headers);
+       console.log(req);
        console.log(authHeader);
        if(!authHeader || !((authHeader.length)>6) || (authHeader.substr(0,6)!="Bearer")){
          res.redirect('/auth/login');

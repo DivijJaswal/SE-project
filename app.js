@@ -4,8 +4,8 @@ const cors = require("cors");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const authRouter = require("./Router/auth");
-const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const adminRouter = require("./Router/admin");
 const jwtVerify = require("./middleware/jwt");
 const verifyLogins = require("./middleware/verifyLogins");
 dotenv.config();
@@ -40,9 +40,8 @@ app.use("/operations",jwtVerify ,(req, res) => {
   res.render("selection");
 });
 
-app.use("/medicine", (req, res) => {
-  res.render("selection");
-});
+// admin 
+app.use("/admin",adminRouter);
 
 // home page 
 app.use("/",  (req, res) => {

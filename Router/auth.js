@@ -12,7 +12,8 @@ router
 
 // verify to create account
 
-router.get("/verify/register/:end_Point",(req,res,next)=>{req.body=req.params.end_Point;next();},signUpForVerification)
+router
+.get("/verify/register/:end_Point",(req,res,next)=>{console.log("HELLO");req.body=req.params.end_Point;next();},signUpComplete)
 
 // login Router
 router

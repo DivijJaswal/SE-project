@@ -1,31 +1,39 @@
 <%- include('header') %>
 
-<div class="container mt-5">
-  <h1>Login</h1>
+  <div class="container mt-5">
+    <h1>Login</h1>
 
-  <div class="row">
-    <div class="col-sm-8">
-      <div class="card">
-        <div class="card-body">
+    <div class="row">
+      <div class="col-sm-8">
+        <div class="card">
+          <div class="card-body">
 
-          <!-- Makes POST request to /login route -->
-          <form action="/auth/login" method="POST">
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" class="form-control" name="username">
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" class="form-control" name="password">
-            </div>
-            <button type="submit" class="btn btn-dark">Login</button>
-          </form>
+            <!-- Makes POST request to /login route -->
+            <form action="/auth/login" method="POST">
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" name="email">
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" name="password">
+              </div>
+              <div class="form-group">
+                <label for="type">Type</label>
+                <select type="select" class="form-control" name="option">
+                  <option value="vendor">vendor</option>
+                  <option value="shopowner">shop Owner</option>
+                </select>
+              </div>
 
+              <button type="submit" class="btn btn-dark">Login</button>
+            </form>
+
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- <div class="col-sm-4">
+      <!-- <div class="col-sm-4">
       <div class="card">
         <div class="card-body">
           <a class="btn btn-blockcbtn-social btn-google" href="/auth/google" role="button">
@@ -40,7 +48,7 @@
       </div>
     </div> -->
 
+    </div>
   </div>
-</div>
 
-<%- include('footer') %>
+  <%- include('footer') %>
