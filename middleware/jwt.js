@@ -14,17 +14,14 @@ const jwtVerify = (req,res,next) =>{
       }
 
        if(!authHeader || !((authHeader.length)>6) || (authHeader.substr(0,6)!="Bearer")){
-         console.log(authHeader);
          res.redirect('/auth/login');
        }
        
        else {
         const token = authHeader.substr(7,authHeader.length-7);
-        console.log("token");
-        console.log(token);
+  
         try{
             const payload = jwt.verify(token,key);
-            console.log(payload);
             req.user = payload;
             next();
         }
