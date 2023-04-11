@@ -4,7 +4,10 @@ const cors = require("cors");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const authRouter = require("./Router/auth");
+const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const jwtVerify = require("./middleware/jwt");
+const verifyLogins = require("./middleware/verifyLogins");
 dotenv.config();
 const mongourl = process.env.MONGO_URL;
 const app = express();
@@ -25,19 +28,28 @@ mongoose.connect(
   }
 );
 
+
+
 app.use(express.static("public"));
 
-app.use("/auth", authRouter);
-app.use("/operations", (req, res) => {
+//authentication router
+app.use("/auth",verifyLogins,authRouter);
+
+// operations for users
+app.use("/operations",jwtVerify ,(req, res) => {
   res.render("selection");
 });
+
 app.use("/medicine", (req, res) => {
   res.render("selection");
 });
-app.use("/", function (req, res) {
+
+// home page 
+app.use("/",  (req, res) => {
   res.status(200).render("home");
 });
 
+// server listening
 app.listen(3000, function () {
   console.log("Server started on port 3000");
 });
