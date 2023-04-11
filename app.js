@@ -3,11 +3,13 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const authRouter = require("./Router/auth");
 const dotenv = require("dotenv");
 const adminRouter = require("./Router/admin");
 const jwtVerify = require("./middleware/jwt");
 const verifyLogins = require("./middleware/verifyLogins");
+const HTO = require("./middleware/homeToOperations");
 dotenv.config();
 const mongourl = process.env.MONGO_URL;
 const app = express();
@@ -15,6 +17,7 @@ app.set("view engine", "ejs");
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 mongoose.set("strictQuery", false);
 mongoose.connect(
@@ -44,7 +47,7 @@ app.use("/operations",jwtVerify ,(req, res) => {
 app.use("/admin",adminRouter);
 
 // home page 
-app.use("/",  (req, res) => {
+app.use("/",HTO,  (req, res) => {
   res.status(200).render("home");
 });
 

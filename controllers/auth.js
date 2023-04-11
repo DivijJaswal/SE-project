@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Vendor = require("../schemas/vendor");
 const shopOwner = require("../schemas/shopOwner");
+const http = require("http");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const forgotUser = require("../schemas/forgotSchema");
@@ -22,8 +23,9 @@ const logIn = async (req, res) => {
                 // tokens must be generated 
                 const jwt_payload = {_id:user._id,name:user.name,email,isvendor:true}; 
                 const token = jwt.sign(jwt_payload,key);
-                await res.cookie("token",token).status(200).json({ message: "loggedIn",token});
-                res.redirect("/operations");
+
+                res.cookie('Authorization',"Bearer " + token);
+                res.redirect(302,"/operations");
             }
             else {
                 res.status(400).json({ message: "Invalid Credentials" });
@@ -39,9 +41,8 @@ const logIn = async (req, res) => {
             if (password === user.password) {
                 const jwt_payload = {_id:user._id,name:user.name,email,isvendor:false}; 
                 const token = jwt.sign(jwt_payload,key);
-                res.cookie("token",token);
-                res.status(200).json({ message: "loggedIn as ShopOwner" });
-                res.redirect("/operations");
+                res.cookie('Authorization',"Bearer " + token);
+                res.redirect(302,"/operations");
             }
             else {
                 res.status(400).json({ message: "Invalid Credentials" });
@@ -103,9 +104,8 @@ const signUpComplete = async (req, res,next) => {
             const jwt_payload = {_id:vendor._id,name,email,isvendor:true}; 
             const token = jwt.sign(jwt_payload,key);
            
-             //res.json({ message: "Account Added",token})
-             res.header({authorization:"Bearer "+token});
-             res.redirect("/operations");
+             res.cookie('Authorization',"Bearer " + token);
+             res.redirect(302,"/operations");
             
         }
     }
@@ -119,9 +119,9 @@ const signUpComplete = async (req, res,next) => {
             await user.save();
             const jwt_payload = {_id:user._id,name,email,isvendor:false}; 
             const token = jwt.sign(jwt_payload,key);
-            //res.status(200).cookie('token',token).json({ message: "Account Added",token })
-            res.cookie('jwt',token)
-            res.redirect(200,"/operations");
+            
+            res.cookie('Authorization',"Bearer " + token);
+            res.redirect(302,"/operations");
         }
 
     }
