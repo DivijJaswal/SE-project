@@ -34,7 +34,6 @@ const logIn = async (req, res) => {
         const user = await shopOwner.findOne({ email });
         if (user) {
             if (password === user.password) {
-                // tokens must be generated
                 const jwt_payload = {_id:user._id,name:user.name,email,isvendor:false}; 
                 const token = jwt.sign(jwt_payload,key);
                 res.cookie("token",token);
