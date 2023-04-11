@@ -26,7 +26,10 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.10.0",
     "morgan": "^1.10.0",
+    "node-mailer": "^0.1.1",
+    "nodemailer": "^6.9.1",
     "passport": "^0.6.0",
-    "passport-jwt": "^4.0.1"
+    "passport-jwt": "^4.0.1",
+    "sha256": "^0.2.0"
   }
 }
