@@ -7,10 +7,12 @@ const ReorderList = new mongoose.Schema({
    },
   vendorId:{
     type:mongoose.SchemaTypes.ObjectId,
+    ref:"vendors",
     require:true
   },
   shopId:{
     type:mongoose.SchemaTypes.ObjectId,
+    ref:"shopowners",
     require:true
   }
 });

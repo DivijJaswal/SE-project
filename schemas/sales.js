@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const sale = new mongoose.Schema({
+  customer_name:{
+    type:String,
+    require:true
+  },
    name:{
     type:String,
     require:true

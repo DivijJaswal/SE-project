@@ -7,6 +7,7 @@ const vendorShop = new mongoose.Schema({
    },
  vendorId:{
     type:mongoose.SchemaTypes.ObjectId,
+    ref:"vendors",
     require:true
   },
  price:{

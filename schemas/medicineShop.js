@@ -8,6 +8,7 @@ const MedicineShop = new mongoose.Schema({
    },
   shopOwnerId:{
     type:mongoose.SchemaTypes.ObjectId,
+    ref:"shopowners",
     require:true
   },
   stock:{
