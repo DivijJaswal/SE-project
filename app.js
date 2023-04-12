@@ -45,6 +45,11 @@ app.use("/operations",jwtVerify ,operationRouter);
 // admin 
 app.use("/admin",adminRouter);
 
+// errors
+app.use("/error",(req,res)=>{
+  res.render("error");
+})
+
 // home page 
 app.use("/",HTO,  (req, res) => {
   res.status(200).render("home");
