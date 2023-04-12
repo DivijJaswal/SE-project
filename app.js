@@ -47,10 +47,14 @@ app.use("/admin",adminRouter);
 
 // errors
 app.use("/error/:error",(req,res)=>{
-  console.log(req.body);
   var error = req.params.error;
   error = JSON.parse(error);
   res.render("error",error);
+})
+
+app.use("/logout",(req,res)=>{
+  res.clearCookie("Authorization");
+  res.redirect("/auth/login");
 })
 
 // home page 

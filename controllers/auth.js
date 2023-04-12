@@ -22,10 +22,11 @@ const logIn = async (req, res) => {
             if (password === user.password) {
                 // tokens must be generated 
                 const jwt_payload = {_id:user._id,name:user.name,email,isvendor:true}; 
+                console.log(jwt_payload);
                 const token = jwt.sign(jwt_payload,key);
 
                 res.cookie('Authorization',"Bearer " + token);
-                res.redirect(302,"/operations");
+                res.redirect(302,"/operations/vendor");
             }
             else {
                 res.status(400).json({ message: "Invalid Credentials" });
@@ -41,6 +42,7 @@ const logIn = async (req, res) => {
             if (password === user.password) {
                 const jwt_payload = {_id:user._id,name:user.name,email,isvendor:false}; 
                 const token = jwt.sign(jwt_payload,key);
+                console.log(token);
                 res.cookie('Authorization',"Bearer " + token);
                 res.redirect(302,"/operations");
             }
@@ -105,7 +107,7 @@ const signUpComplete = async (req, res,next) => {
             const token = jwt.sign(jwt_payload,key);
            
              res.cookie('Authorization',"Bearer " + token);
-             res.redirect(302,"/operations");
+             res.redirect(302,"/operations/vendor");
             
         }
     }

@@ -6,7 +6,6 @@ const key = process.env.JWT_KEY;
 
 const jwtVerify = (req,res,next) =>{
        var authHeader = req.headers.authorization||req.headers.cookie;
-
        if(!authHeader){res.redirect("/auth/login");}
 
        if(!req.headers.authorization){
@@ -20,11 +19,9 @@ const jwtVerify = (req,res,next) =>{
        
        else {
         const token = authHeader.substr(7,authHeader.length-7);
-  
         try{
             var payload = jwt.verify(token,key);
-            console.log(payload);
-            payload._id = mongoose.Types.ObjectId(payload._id);
+          //  payload._id = mongoose.Types.ObjectId(payload._id);
             req.user = payload;
             next();
         }

@@ -2,22 +2,24 @@ const express = require("express");
 const Vendor = require("../schemas/vendor.js");
 const shopOwner = require("../schemas/shopOwner.js");
 const {signUpForVerification,signUpComplete,logIn,forgotPassword,forgotPasswordVerifier} = require("../controllers/auth.js");
+const jwtVerify = require("../middleware/jwt.js");
+const { logInCheck } = require("../middleware/auth.js");
 const router = express.Router();
 
 
 // signup Router
 router
-.get("/register",(req,res)=>{res.render("signup");})
+.get("/register",logInCheck,(req,res)=>{res.render("signup");})
 .post("/register", signUpForVerification);
 
 // verify to create account
 
 router
-.get("/verify/register/:end_Point",(req,res,next)=>{console.log("HELLO");req.body=req.params.end_Point;next();},signUpComplete)
+.get("/verify/register/:end_Point",(req,res,next)=>{req.body=req.params.end_Point;next();},signUpComplete)
 
 // login Router
 router
-.get("/login",(req,res)=>{res.render("login");})
+.get("/login",logInCheck,(req,res)=>{res.render("login");})
 .post("/login",logIn);
 
 
