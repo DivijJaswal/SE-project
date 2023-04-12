@@ -46,8 +46,11 @@ app.use("/operations",jwtVerify ,operationRouter);
 app.use("/admin",adminRouter);
 
 // errors
-app.use("/error",(req,res)=>{
-  res.render("error");
+app.use("/error/:error",(req,res)=>{
+  console.log(req.body);
+  var error = req.params.error;
+  error = JSON.parse(error);
+  res.render("error",error);
 })
 
 // home page 

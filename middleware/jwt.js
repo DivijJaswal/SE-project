@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const mongoose = require("mongoose");
 dotenv.config();
 const key = process.env.JWT_KEY;
 
@@ -21,7 +22,9 @@ const jwtVerify = (req,res,next) =>{
         const token = authHeader.substr(7,authHeader.length-7);
   
         try{
-            const payload = jwt.verify(token,key);
+            var payload = jwt.verify(token,key);
+            console.log(payload);
+            payload._id = mongoose.Types.ObjectId(payload._id);
             req.user = payload;
             next();
         }
