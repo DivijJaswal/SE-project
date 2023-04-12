@@ -133,10 +133,13 @@
       <form action="/operations" method="post">
         <div class="info">
           <input class="fname" type="text" name="name" placeholder="Medicine Name">
-          <input class="fname" type="text" name="name" placeholder="Vendor Name">
           <input type="email" name="name" placeholder="Vendor Email">
           <input type="number" name = "quantity" placeholder="Medicine Quantity">
-          
+          <div class="input-group mb-3">
+            <span class="input-group-text">₹</span>
+            <input type="text" class="form-control" aria-label="Amount (to the nearest rupee)">
+            <span class="input-group-text">.00</span>
+          </div>
         </div>
         <button href="/operations" class="button">Submit</button>
       </form>

@@ -45,7 +45,12 @@ router
 })
 
 // selling of medicines to customers
-router.get("/sales",verifyshopOwner,sales);
+router
+.get("/sales",verifyshopOwner,(req,res)=>{
+    const location = path.join(__dirname, '..', 'views', 'sales');
+    res.render(location);
+})
+.post("/sales",verifyshopOwner,sales);
 
 // show operations to shop Owner
 router.get("/",verifyshopOwner,(req,res)=>{

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Vendor form</title>
+    <title>Vendor Add Medicine</title>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet' type='text/css'>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <style>
@@ -129,20 +129,18 @@
   </head>
   <body>
     <div class="main-block">
-      <h1>Add Vendor</h1>
-      <form action="/operations" method="post">
+      <h1>Add Medicine</h1>
+      <form action="/vendor/addMed" method="post">
         <div class="info">
-          <input class="fname" type="text" name="name" placeholder="Vendor Name">
-          <input type="email" name="name" placeholder="Vendor Email">
-          <input type="text" name = "medicine name" placeholder="Medicine Offered">
+          <input class="fname" type="text" name="name" placeholder="Medicine Name">
+          <input type="number" name = "quantity" placeholder="Medicine Quantity">
           <div class="input-group mb-3">
             <span class="input-group-text">₹</span>
             <input type="text" class="form-control" aria-label="Amount (to the nearest rupee)">
             <span class="input-group-text">.00</span>
           </div>
-          
         </div>
-        <button href="/operations" class="button">Submit</button>
+        <button href="/vendor/addMed" class="button">Submit</button>
       </form>
     </div>
   </body>

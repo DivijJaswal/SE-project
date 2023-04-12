@@ -2,7 +2,10 @@
 <html>
   <head>
     <title>Query</title>
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
     <style>
       @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
@@ -55,20 +58,20 @@
     </style>
   </head>
   <body>
-    <div class="wrap">
-      <div class="search">
-        <form action="/operations/query" method="POST">
-        <input
-          type="text"
-          class="searchTerm"
-          placeholder="Enter the name of the Medicine"
-          name="medicine"
-        />
-        <button type="submit" class="searchButton">
-          <i class="fa fa-search"></i>
-        </button>
-      </form>
+    <form action="/operations/query" method="POST">
+      <div class="wrap">
+        <div class="search">
+          <input
+            type="text"
+            class="searchTerm"
+            placeholder="Enter the name of the Medicine"
+            name="medicine"
+          />
+          <button type="submit" class="searchButton">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
       </div>
-    </div>
+    </form>
   </body>
 </html>
