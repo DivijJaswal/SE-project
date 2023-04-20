@@ -33,7 +33,7 @@ router
 .get("/query/:data",verifyshopOwner,(req,res)=>{
 
     const location = path.join(__dirname, '..', 'views', 'query');
-    const data = req.params.data;
+    const data = JSON.parse(req.params.data);
     res.render(location,data);
 })
 .post("/query",verifyshopOwner,query)
@@ -67,6 +67,8 @@ router.get("/vendor",verifyVendor,(req,res)=>{
 
 // show orderLists which has to be approved 
 router.get("/vendor/orderlist",verifyVendor,getOrderList,(req,res)=>{
+    console.log("hello welcome");
+    console.log(req.orders);
     res.render("showOrderList",{orders:req.orders});
 });
 

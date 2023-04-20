@@ -130,17 +130,17 @@
   <body>
     <div class="main-block">
       <h1>Add Medicine</h1>
-      <form action="/vendor/addMed" method="post">
+      <form action="/operations/vendor/addMed" method="post">
         <div class="info">
           <input class="fname" type="text" name="name" placeholder="Medicine Name">
-          <input type="number" name = "quantity" placeholder="Medicine Quantity">
+          <input type="number" name = "stock" placeholder="Medicine Quantity">
           <div class="input-group mb-3">
             <span class="input-group-text">₹</span>
-            <input type="text" class="form-control" aria-label="Amount (to the nearest rupee)">
+            <input type="text" class="form-control" name="price" aria-label="Amount (to the nearest rupee)">
             <span class="input-group-text">.00</span>
           </div>
         </div>
-        <button href="/vendor/addMed" class="button">Submit</button>
+        <button href="/operations/vendor/addMed" class="button">Submit</button>
       </form>
     </div>
   </body>

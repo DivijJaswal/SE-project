@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Order = require("../schemas/Order");
 const medicineShop = require("../schemas/medicineShop");
 const vendorStore = require("../schemas/vendorStore");
-const getOrderList = async (req,res)=>{
+const getOrderList = async (req,res,next)=>{
     const vendorId = req.user._id;
     const orders = await Order.find({vendorId:vendorId});
     req.orders = orders;
@@ -33,6 +33,7 @@ const processOrder = async (req,res) =>{
 
 const addMedicine  = async (req,res) =>{
     const {name,stock,price} = req.body;
+    console.log(req.body);
     const vendorId = req.user._id;
     var med =await vendorStore.findOne({name,vendorId});
     if(med){
@@ -42,6 +43,8 @@ const addMedicine  = async (req,res) =>{
     else {
         med = new vendorStore({name,vendorId,stock,price});
     }
+    console.log(med);
+    console.log("HELLO");
     await med.save();
     res.redirect("/operations/vendor");
 
