@@ -21,5 +21,7 @@ const signUpSchema = new mongoose.Schema({
         type:String,
         require:true
     }
+},{
+    timestamps:true
 });
 module.exports  = new mongoose.model("signUpUsers",signUpSchema); 

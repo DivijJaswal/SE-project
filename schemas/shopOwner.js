@@ -13,6 +13,8 @@ const shopOwner = new mongoose.Schema({
     type:String,
     require:true
    }
+},{
+   timestamps:true
 });
 
 module.exports = mongoose.model("shopOwners",shopOwner);

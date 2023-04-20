@@ -8,32 +8,18 @@
 </head>
 <body>
     <div class="box">
- 
+       
         <% orders.forEach(function(item){ %>
-          <form action="/operations/vendor/order/accept/:<%=item._id%>" method="post">
+          <form action="/operations/vendor/order/accept/<%=item._id%>" method="get">
            <div class="item">
-<<<<<<< HEAD
-             <input type="checkbox" name = "checkbox" value="<%=item._id%> " onChange = "this.form.submit()">
-             <p><%=  item.name  %></p>
-             <p><%=  item.shopId  %></p>
-             <p><%=  item.stock  %></p>
-           </div>
-          </form>
-           
-         <% }) %>
-        </div>
-</body>
-=======
             <table>
               <tr>
                 <td><p><%=  item.name  %></p></td>
-                <td><p><%=  item.shopId  %></p></td>
                 <td><p><%=  item.stock  %></p></td> 
-                <td><input type="checkbox" name = "checkbox" value="<%=item._id%> " onChange = "this.form.submit()"></td>
+                <td><button onClick="submit">Accept</button></td>
               </tr>
             </table>       
          <% }) %>
         </div>
 </body>
 
->>>>>>> 995748a98c8c388836ab52916b476302231a45e4

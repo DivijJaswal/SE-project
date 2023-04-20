@@ -28,7 +28,7 @@ const order = async (req,res)=>{
     const {name,email,stock,price} = req.body;
     
     console.log(req.body);
-    const {_id} = req.user._id;
+    const {_id} = req.user;
     if(stock <= 0){
         const error = {message:"Quantity should be greater than zero"};
         res.redirect("/error/"+JSON.stringify(error));
@@ -48,6 +48,7 @@ const order = async (req,res)=>{
         const error = {message:"Vendor does not have that much quantity"};
         res.redirect("/error/"+JSON.stringify(error));
     }
+    console.log("ID of shop is ",_id);
     const new_order = new Order({name,vendorId:vendor._id,shopId:_id,stock});
     await new_order.save();
     res.redirect("/operations");
@@ -58,7 +59,7 @@ const order = async (req,res)=>{
 const medicine = async (req,res)=>{
     const {name,email} = req.body;
     console.log(req.body);
-    const vendor = Vendor.findOne({email});
+    const vendor = await Vendor.findOne({email});
     if(!vendor){
         const error = {message:"Vendor does not exists"};
        return res.redirect("/error/"+JSON.stringify(error));
@@ -69,6 +70,8 @@ const medicine = async (req,res)=>{
     }
     const med = new medicineShop({name,shopOwnerId:req.user._id,vendorId:vendor._id});
     await med.save();
+    const reOrderList = new ReorderLists({name,shopId:req.user._id,vendorId:vendor._id});
+    await reOrderList.save();
     res.redirect("/operations");
 }
 
@@ -87,10 +90,12 @@ const sales = async (req,res) =>{
       }
       else {
         const new_sale = new Sale({customer_name,name,stock:quantity,price,shopId});
-        med.stock-=stock;
+        med.stock-=quantity;
 
         await new_sale.save();
         await med.save();
+        console.log(med.stock);
+        console.log(threshold);
         if(med.stock<threshold){
              await OrderIfThreshold(shopId,name,threshold-med.stock);
         }
@@ -108,14 +113,19 @@ const sortByCriteria = (a,b)=>{
     return 0;
 }
 const OrderIfThreshold = async (shopId,name,stock) =>{
-            const vendors =await ReorderLists.find({shopId,name});
-            var cost_vendors = vendors.map(async (each)=>{
-                return await vendorStore.findOne({name,vendorId:each._id});
-            });
-            await cost_vendors.sort(sortByCriteria);
-            const {vendorId,price} = cost_vendors[0];
-            const name1 = cost_vendors[0].name;
+            var vendors =await ReorderLists.find({shopId,name});
+            const vendor_ids = vendors.map((vendor)=>{return vendor.vendorId.toString();});
+            var final_vendors = [];
+            final_vendors = await vendorStore.find({vendorId:{$in:vendor_ids},name});
+            console.log(final_vendors);
+            await final_vendors.sort(sortByCriteria);
+            console.log(final_vendors);
+            const {vendorId,price} = final_vendors[0];
+            console.log(vendorId);
+            const name1 = final_vendors[0].name;
+            console.log(name1);
             var new_order = new Order({name:name1,vendorId,shopId,stock,price});
+            console.log(new_order);
             await new_order.save();
 }
 const getOrdersSales = (req,res,next)=>{

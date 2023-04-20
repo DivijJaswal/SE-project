@@ -3,8 +3,7 @@ const mongoose = require("mongoose");
 const Order = new mongoose.Schema({
    name:{
     type:String,
-    require:true,
-    unique:true
+    require:true
    },
   vendorId:{
     type:mongoose.SchemaTypes.ObjectId,
@@ -24,6 +23,7 @@ const Order = new mongoose.Schema({
     type:Boolean,
     default:false
   }
-});
+},
+{timestamps:true});
 
 module.exports = mongoose.model("Orders",Order);

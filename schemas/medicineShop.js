@@ -16,6 +16,8 @@ const MedicineShop = new mongoose.Schema({
     require:true,
     default:0
   }
+},{
+  timestamps:true
 });
 
 module.exports = mongoose.model("MedicineShop",MedicineShop);

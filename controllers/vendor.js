@@ -9,16 +9,15 @@ const getOrderList = async (req,res,next)=>{
     next();
 };
 const processOrder = async (req,res) =>{
-        const processId = req.params.orderId;
-      
-            order = await Order.findOne({_id:processId});
+        const processId = req.orderId;
+        order = await Order.findById(processId);
             const {name,shopId,vendorId,stock,price} = order;
             const vendorShop = await vendorStore.findOne({name,vendorId});
-            const medicineStore = await medicineShop.findOne({name,shopOwnerId:shopId})
+            const medicineStore = await medicineShop.findOne({name,shopOwnerId:shopId});
             if(!vendorShop || !medicineStore || vendorShop.stock<stock){
-                console.log("ERROR");
                 // error handling
-                return res.json();
+                const data = JSON.stringify({message:"No stock or no vendor"});
+                return res.redirect("/error/"+data);
             }
             else {
                 vendorShop.stock-=stock;

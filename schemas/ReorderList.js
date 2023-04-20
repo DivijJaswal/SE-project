@@ -15,6 +15,8 @@ const ReorderList = new mongoose.Schema({
     ref:"shopowners",
     require:true
   }
+},{
+  timestamps:true
 });
 
 module.exports = mongoose.model("ReorderLists",ReorderList);

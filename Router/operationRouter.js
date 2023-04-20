@@ -70,11 +70,24 @@ router.get("/vendor",verifyVendor,(req,res)=>{
 router.get("/vendor/orderlist",verifyVendor,getOrderList,(req,res)=>{
     console.log("hello welcome");
     console.log(req.orders);
-    res.render("showOrderList",{orders:req.orders});
+    let location = path.join(__dirname,'..','views','error');
+    if(!req.orders){
+        res.render(location,{message:"No orders Found"});
+    }
+    let final_orders=[];
+     req.orders.map((order)=>{if(order.accept===false){final_orders.push(order);}
+})
+    if( final_orders.length===0){
+        return res.render(location,{message:"No orders Found"});
+    }
+     location = path.join(__dirname,'..','views','showOrderList');
+     res.render(location,{orders:final_orders});
 });
 
 // process the order if accept button is clicked
-router.get("/vendor/order/accept/:orderId",verifyVendor,processOrder);
+router.get("/vendor/order/accept/:id",(req,res,next)=>{req.orderId = req.params.id;
+    //  req.orderId = req.orderId.slice(0,-1);
+    next();},verifyVendor,processOrder);
 
 
 // add medicine to vendor Store

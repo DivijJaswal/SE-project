@@ -15,5 +15,8 @@ const forgotSchema  = new mongoose.Schema({
         type:String,
         require:true
      }
+},
+{
+   timestamps:true
 });
 module.exports = mongoose.model("forgotUser",forgotSchema);
