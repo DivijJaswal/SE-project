@@ -61,7 +61,7 @@ const logIn = async (req, res) => {
 }
 
 const signUpForVerification = async (req,res) =>{
-    const {username,password,email,option} = req.body;
+    const {username,email,password,option} = req.body;
     const date = new Date();
     const end_Point = sha256(date+email);
     const user = await signUpUsers.findOne({email:email,type:option});
@@ -69,6 +69,7 @@ const signUpForVerification = async (req,res) =>{
     if(user){await user.delete();}
     const user1 = new signUpUsers({name:username,email,password,type:option});
     try{
+        console.log("try");
      await user1.save();
      await sendEmail({subject:"Email Verfication Link",url,email});
      res.redirect("/auth/login");
