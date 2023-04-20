@@ -15,7 +15,7 @@ const query = async (req,res) =>{
     if(medicines){
        const med = {medicine:medicines};
        const data = JSON.stringify(med);
-       res.redirect("/operations/query/"+data);
+       return res.redirect("/operations/query/"+data);
        
     }
     else {
@@ -48,7 +48,7 @@ const order = async (req,res)=>{
         const error = {message:"Vendor does not have that much quantity"};
         res.redirect("/error/"+JSON.stringify(error));
     }
-    const new_order = new Order({name,vendorId:vendor._id,shopId:_id,stock,price});
+    const new_order = new Order({name,vendorId:vendor._id,shopId:_id,stock});
     await new_order.save();
     res.redirect("/operations");
    
@@ -61,7 +61,7 @@ const medicine = async (req,res)=>{
     const vendor = Vendor.findOne({email});
     if(!vendor){
         const error = {message:"Vendor does not exists"};
-        res.redirect("/error/"+JSON.stringify(error));
+       return res.redirect("/error/"+JSON.stringify(error));
     }
     const med1 = await medicineShop.findOne({name,vendorId:vendor._id,shopOwnerId:req.user._id});
     if(med1){
@@ -73,14 +73,20 @@ const medicine = async (req,res)=>{
 }
 
 const sales = async (req,res) =>{
-      const {customer_name,name,stock,price} = req.body;
+      const {customer_name,name,quantity,price} = req.body;
+      console.log(req.body);
       const shopId = req.user._id;
-      const med = medicineShop.findOne({shopOwnerId:shopId,name});
-      if(!med || med.stock<stock){
-          console.log("No Medicine");
+      const med = await medicineShop.findOne({shopOwnerId:shopId,name});
+      if(!med){
+        const error = {message:"This medicine is not sold in this shop"};
+        return res.redirect("/error/"+JSON.stringify(error));
+      }
+      else if(med.stock<quantity){
+        const error = {message:"Less quantity avaliable in shop"};
+        return res.redirect("/error/"+JSON.stringify(error));
       }
       else {
-        const new_sale = new Sale({customer_name,name,stock,price,shopId});
+        const new_sale = new Sale({customer_name,name,stock:quantity,price,shopId});
         med.stock-=stock;
 
         await new_sale.save();
@@ -112,4 +118,23 @@ const OrderIfThreshold = async (shopId,name,stock) =>{
             var new_order = new Order({name:name1,vendorId,shopId,stock,price});
             await new_order.save();
 }
-module.exports = {query,order,medicine,sales};
+const getOrdersSales = (req,res,next)=>{
+    const id = req.user._id;
+    const orders = Order.find({shopId:id});
+    const sales = Sale.find({shopId:id});
+    var ordersCost = 0;
+    var salesCost =0;
+    orders.map((order)=>{
+           if(order.accept)ordersCost+=(order.price*order.cost);
+    });
+    sales.map((sale)=>{
+           salesCost+=sale.price*sale.cost;
+    })
+    const data = {
+        orders,sales,ordersCost,salesCost
+    };
+    req.data = data;
+    next();
+
+}
+module.exports = {query,order,medicine,sales,getOrdersSales};

@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const {getOrderList,processOrder,addMedicine} = require("../controllers/vendor.js")
-const {query, order,medicine, sales} = require("../controllers/shopOwner.js");
+const {query, order,medicine, sales, getOrdersSales} = require("../controllers/shopOwner.js");
 const { verifyshopOwner, verifyVendor } = require("../middleware/verifyEntity.js");
 const router = express.Router();
 
@@ -32,22 +32,18 @@ router
 })
 .get("/query/:data",verifyshopOwner,(req,res)=>{
 
-<<<<<<< HEAD
     const location = path.join(__dirname, '..', 'views', 'queryResult');
-    const data = req.params.data;
-    res.render(location,{data: data});
-=======
-    const location = path.join(__dirname, '..', 'views', 'query');
     const data = JSON.parse(req.params.data);
     res.render(location,data);
->>>>>>> a4b16abd1e1114824624e31626ed441b0593c15d
 })
 .post("/query",verifyshopOwner,query)
 
+
+
 router
-.get("/report",verifyshopOwner,(req,res)=>{
+.get("/report",verifyshopOwner,getOrdersSales,(req,res)=>{
     const location = path.join(__dirname, '..', 'views', 'report');
-    res.render(location);
+    res.render(location,req.data);
 })
 
 // selling of medicines to customers
@@ -73,13 +69,9 @@ router.get("/vendor",verifyVendor,(req,res)=>{
 
 // show orderLists which has to be approved 
 router.get("/vendor/orderlist",verifyVendor,getOrderList,(req,res)=>{
-<<<<<<< HEAD
-    res.render("showOrderList",{orders: orders});
-=======
     console.log("hello welcome");
     console.log(req.orders);
     res.render("showOrderList",{orders:req.orders});
->>>>>>> a4b16abd1e1114824624e31626ed441b0593c15d
 });
 
 // process the order if accept button is clicked

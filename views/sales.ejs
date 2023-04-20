@@ -144,12 +144,12 @@
   <body>
     <div class="main-block">
       <h1>Add Sales</h1>
-      <form action="/operations" method="post">
+      <form action="/operations/sales" method="post">
         <div class="info">
           <input
             class="fname"
             type="text"
-            name="name"
+            name="customer_name"
             placeholder="Customer Name"
           />
           <input
@@ -168,12 +168,13 @@
             <input
               type="text"
               class="form-control"
+              name="price"
               aria-label="Amount (to the nearest rupee)"
             />
             <span class="input-group-text">.00</span>
           </div>
         </div>
-        <button href="/operations" class="button">Submit</button>
+        <button href="/operations/sales" class="button">Submit</button>
       </form>
     </div>
   </body>

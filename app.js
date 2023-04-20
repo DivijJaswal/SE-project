@@ -49,6 +49,7 @@ app.use("/admin",adminRouter);
 app.use("/error/:error",(req,res)=>{
   var error = req.params.error;
   error = JSON.parse(error);
+  console.log(error);
   res.render("error",error);
 })
 

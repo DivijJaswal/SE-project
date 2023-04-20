@@ -13,7 +13,8 @@ const MedicineShop = new mongoose.Schema({
   },
   stock:{
     type:Number,
-    require:true
+    require:true,
+    default:0
   }
 });
 
