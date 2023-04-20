@@ -27,7 +27,7 @@ const processOrder = async (req,res) =>{
                 await vendorShop.save();
                 await medicineStore.save();
                 await order.save();
-                res.redirect("/operations/vendor");
+                res.redirect("/operations/vendor/orderlist");
             }
 };
 

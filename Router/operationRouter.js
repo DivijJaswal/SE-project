@@ -33,8 +33,7 @@ router
 .get("/query/:data",verifyshopOwner,(req,res)=>{
 
     const location = path.join(__dirname, '..', 'views', 'queryResult');
-    const data = JSON.parse(req.params.data);
-    res.render(location,data);
+    res.render(location,{data: data});
 })
 .post("/query",verifyshopOwner,query)
 
