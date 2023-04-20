@@ -15,8 +15,8 @@ const vendorShop = new mongoose.Schema({
     require:true
  },
  stock:{
-    require:true,
-    type:Number
+    type:Number,
+    require:true
  }
 });
 
