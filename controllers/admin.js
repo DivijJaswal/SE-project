@@ -4,9 +4,7 @@ const shopOwner = require("../schemas/shopOwner");
 
 const getAllVendors = async (req,res) =>{
        const users = await Vendors.find({});
-       const user = await Vendors.findOne({email:"abhiqqlash@gmail.com"});
-       console.log(user);
-       res.status(200).json({users});
+       return res.status(200).json({users});
 }
 const getAllshopOwners  = async (req,res) =>{
     const users = await shopOwner.find({});
@@ -17,7 +15,8 @@ const removeVendor = async (req,res) =>{
        const {email} = req.body;
        const user = await Vendors.find({email});
        if(!user){
-           res.status(200).json({message:"No User"});
+        const error = {message:"No Such User Exists"};
+        return res.redirect("/error/"+JSON.stringify(error));
        }
        else {
         await user.delete();

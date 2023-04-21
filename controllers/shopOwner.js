@@ -64,15 +64,22 @@ const medicine = async (req,res)=>{
         const error = {message:"Vendor does not exists"};
        return res.redirect("/error/"+JSON.stringify(error));
     }
-    const med1 = await medicineShop.findOne({name,vendorId:vendor._id,shopOwnerId:req.user._id});
-    if(med1){
-        res.redirect("/operations");
+    const find_med = await vendorStore.findOne({name,vendorId:vendor._id});
+    if(!find_med){
+        const error = {message:"Vendor does not sell that medicine"};
+        return res.redirect("/error/"+JSON.stringify(error));
     }
+    const med1 = await medicineShop.findOne({name,shopOwnerId:req.user._id});
+    if(med1){
+       return  res.redirect("/operations");
+    }
+    else {
     const med = new medicineShop({name,shopOwnerId:req.user._id,vendorId:vendor._id});
     await med.save();
     const reOrderList = new ReorderLists({name,shopId:req.user._id,vendorId:vendor._id});
     await reOrderList.save();
     res.redirect("/operations");
+    }
 }
 
 const sales = async (req,res) =>{
@@ -117,21 +124,16 @@ const OrderIfThreshold = async (shopId,name,stock) =>{
             const vendor_ids = vendors.map((vendor)=>{return vendor.vendorId.toString();});
             var final_vendors = [];
             final_vendors = await vendorStore.find({vendorId:{$in:vendor_ids},name});
-            console.log(final_vendors);
             await final_vendors.sort(sortByCriteria);
-            console.log(final_vendors);
             const {vendorId,price} = final_vendors[0];
-            console.log(vendorId);
             const name1 = final_vendors[0].name;
-            console.log(name1);
             var new_order = new Order({name:name1,vendorId,shopId,stock,price});
-            console.log(new_order);
             await new_order.save();
 }
-const getOrdersSales = (req,res,next)=>{
+const getOrdersSales = async (req,res,next)=>{
     const id = req.user._id;
-    const orders = Order.find({shopId:id});
-    const sales = Sale.find({shopId:id});
+    const orders = await Order.find({shopId:id});
+    const sales = await Sale.find({shopId:id});
     var ordersCost = 0;
     var salesCost =0;
     orders.map((order)=>{

@@ -16,8 +16,8 @@ const processOrder = async (req,res) =>{
             const medicineStore = await medicineShop.findOne({name,shopOwnerId:shopId});
             if(!vendorShop || !medicineStore || vendorShop.stock<stock){
                 // error handling
-                const data = JSON.stringify({message:"No stock or no vendor"});
-                return res.redirect("/error/"+data);
+                const error = JSON.stringify({message:"No stock or no vendor"});
+                return res.redirect("/error/"+error);
             }
             else {
                 vendorShop.stock-=stock;
@@ -32,7 +32,6 @@ const processOrder = async (req,res) =>{
 
 const addMedicine  = async (req,res) =>{
     const {name,stock,price} = req.body;
-    console.log(req.body);
     const vendorId = req.user._id;
     var med =await vendorStore.findOne({name,vendorId});
     if(med){
@@ -42,8 +41,6 @@ const addMedicine  = async (req,res) =>{
     else {
         med = new vendorStore({name,vendorId,stock,price});
     }
-    console.log(med);
-    console.log("HELLO");
     await med.save();
     res.redirect("/operations/vendor");
 

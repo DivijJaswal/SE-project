@@ -29,11 +29,13 @@ const logIn = async (req, res) => {
                 res.redirect(302,"/operations/vendor");
             }
             else {
-                res.status(400).json({ message: "Invalid Credentials" });
+                const error = {message:"Invalid Credentials"};
+                return res.redirect("/error/"+JSON.stringify(error));
             }
         }
         else {
-            res.status(200).json({ message: "Account does not exists" })
+            const error = { message: "Account does not exists" };
+            return res.redirect("/error/"+JSON.stringify(error));
         }
     }
     else {
@@ -47,12 +49,14 @@ const logIn = async (req, res) => {
                 res.redirect(302,"/operations");
             }
             else {
-                res.status(400).json({ message: "Invalid Credentials" });
+                const error = {message:"Invalid Credentials"};
+                return res.redirect("/error/"+JSON.stringify(error));
             }
         }
 
         else {
-            res.status(200).json({ message: "Account does not exists" })
+            const error = { message: "Account does not exists" };
+            return res.redirect("/error/"+JSON.stringify(error));
         }
 
 
@@ -115,7 +119,8 @@ const signUpComplete = async (req, res,next) => {
     else {
         const user = await shopOwner.findOne({ email });
         if (user) {
-            return res.status(200).json({ message: "User with this email already Exists" });
+            const error = { message: "User with this email already Exists" };
+            return res.redirect("/error/"+JSON.stringify(error));
         }
         else {
             const user = await new shopOwner({ email, name, password });
