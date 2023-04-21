@@ -43,6 +43,7 @@ router
 router
 .get("/report",verifyshopOwner,getOrdersSales,(req,res)=>{
     const location = path.join(__dirname, '..', 'views', 'report');
+    console.log(req.data);
     res.render(location,req.data);
 })
 

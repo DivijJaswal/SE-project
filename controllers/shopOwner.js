@@ -134,17 +134,30 @@ const getOrdersSales = async (req,res,next)=>{
     const id = req.user._id;
     const orders = await Order.find({shopId:id});
     const sales = await Sale.find({shopId:id});
-    var ordersCost = 0;
+    var ordersCost =0;
     var salesCost =0;
-    orders.map((order)=>{
-           if(order.accept)ordersCost+=(order.price*order.cost);
+    var final_orders = [];
+    var vendor_ids = [];
+    orders.map((ord)=>{vendor_ids.push(ord.vendorId);})
+    final_orders = await vendorStore.find({vendorId:{$in:vendor_ids}});
+    console.log("hello");
+    console.log(final_orders);
+    orders.map( (order)=>{
+           if(order.accept){
+              final_orders.map((ele)=>{
+                if(ele.name === order.name && order.vendorId.toString()===ele.vendorId.toString()){
+                    ordersCost+=(ele.price*order.stock);
+                }
+              })
+           }
     });
-    sales.map((sale)=>{
-           salesCost+=sale.price*sale.cost;
+    await sales.map((sale)=>{
+           salesCost=salesCost+(sale.price*sale.stock);
     })
     const data = {
-        orders,sales,ordersCost,salesCost
+        orders,sales,ordersCost:ordersCost,salesCost:salesCost
     };
+    console.log(data);
     req.data = data;
     next();
 
