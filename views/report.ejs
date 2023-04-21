@@ -17,7 +17,7 @@
         <% req.data.orders.forEach(function(item){ %>
             <form action="/operations/vendor/order/accept/<%=item._id%>" method="get">
              <div class="item">
-              <table>
+              <table class="table">
                 <tr>
                   <td><p><%=  item.name  %></p></td>
                   <td><p><%= item.vendorId %></p></td>
@@ -33,7 +33,7 @@
         <% req.data.sales.forEach(function(item){ %>
             <form action="/operations/vendor/order/accept/<%=item._id%>" method="get">
              <div class="item">
-              <table>
+              <table class="table">
                 <tr>
                   <td><p><%= item.customer_name %></p></td>
                   <td><p><%=  item.name  %></p></td>

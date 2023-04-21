@@ -17,7 +17,7 @@
         <% orders.forEach(function(item){ %>
           <form action="/operations/vendor/order/accept/<%=item._id%>" method="get">
            <div class="item">
-            <table>
+            <table class="table">
               <tr>
                 <td><p><%=  item.name  %></p></td>
                 <td><p><%=  item.stock  %></p></td> 
