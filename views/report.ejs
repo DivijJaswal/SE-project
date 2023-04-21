@@ -14,7 +14,7 @@
 <body>
     <div class="container">
         <h1>Orders Made</h1>
-        <% req.data.orders.forEach(function(item){ %>
+        <% orders.forEach(function(item){ %>
             <form action="/operations/vendor/order/accept/<%=item._id%>" method="get">
              <div class="item">
               <table class="table">
@@ -26,11 +26,11 @@
                 </tr>
               </table>       
            <% }) %>
-           <h1>Total orders cost = <%= req.data.ordersCost %></h1>
+           <h1>Total orders cost = <%= ordersCost %></h1>
     </div>
     <div class="container">
         <h1>Sales Made</h1>
-        <% req.data.sales.forEach(function(item){ %>
+        <% sales.forEach(function(item){ %>
             <form action="/operations/vendor/order/accept/<%=item._id%>" method="get">
              <div class="item">
               <table class="table">
@@ -43,10 +43,10 @@
                 </tr>
               </table>       
            <% }) %>
-           <h1>Total sales cost = <%= req.data.salesCost %></h1>
+           <h1>Total sales cost = <%= salesCost %></h1>
     </div>
     <div class="container">
-        <h1>Total Profit = <%= req.data.salesCost - req.data.ordersCost %></h1>
+        <h1>Total Profit = <%= salesCost - ordersCost %></h1>
     </div>
    
     
